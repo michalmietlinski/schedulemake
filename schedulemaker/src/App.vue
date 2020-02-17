@@ -1,35 +1,49 @@
 <template>
   <div id="app">
-    <UserAdd />
-    <ListaUserow />
-    <SingleUser />
-    <WeekView />
+   
+      <div id="nav">
+       
+            <router-link to="/">Pracownicy</router-link>
+            <router-link to="/SingleUser">Per pracownik</router-link>
+            <router-link to="/WeekView">Widok kalendarza</router-link>
+
+            <button v-on:click="save">Zapisz do pamięci przeglądarki</button>
+      </div>
+     <div class="app-wrapper">
+        <transition name="router-anim" enter-active-class="animated bounceInLeft">
+          <router-view/>
+        </transition>
+      </div>
   </div>
 </template>
 
 <script>
-import ListaUserow from './components/ListaUserow.vue'
-import UserAdd from './components/UserAdd.vue'
-import SingleUser from './components/SingleUser.vue'
-import WeekView from './components/WeekView.vue'
+import store from './store';
 
 export default {
   name: 'App',
-  components: {
-    ListaUserow,
-    UserAdd,
-    SingleUser,
-    WeekView
-  }
+    methods:{
+    save: function(){
+            store.dispatch('save',);
+    },
+    }
 }
 </script>
 
-<style>
+<style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 30px;
+}
+#app * {
+  box-sizing:border-box;
+}
+#nav{
+  a{
+    padding: 5px 10px;
+  }
 }
 </style>

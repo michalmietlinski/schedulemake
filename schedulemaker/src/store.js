@@ -15,7 +15,7 @@ Vue.use(Vuex)
 let days={}
 let t=new Date();
 Date.prototype.yyyymmdd = function() {
-  var mm = this.getMonth() + 1; // getMonth() is zero-based
+  var mm = this.getMonth() + 1; 
   var dd = this.getDate();
 
   return [this.getFullYear(),
@@ -31,9 +31,9 @@ for(let i=0;i<24;i++){
 
 export default new Vuex.Store({
   state: {
-    users:[],
-    roles:['Barman', 'Kelner'],
-    days
+    users: JSON.parse(sessionStorage.getItem('users')) || [],
+    roles: JSON.parse(sessionStorage.getItem('roles'))|| ['Barman', 'Kelner'],
+    days: JSON.parse(sessionStorage.getItem('days')) || days
   },
   
   getters: {
@@ -134,8 +134,11 @@ export default new Vuex.Store({
       state.days[date[1]].assigned[r.role]=state.days[date[1]].assigned[r.role].filter(el=>el!=r)
 
     },
-    
-
+    save(state) {
+      sessionStorage.setItem('users', JSON.stringify(state.users));
+      sessionStorage.setItem('roles', JSON.stringify(state.roles));
+      sessionStorage.setItem('days', JSON.stringify(state.days));
+    }
   },
   
   actions: {
@@ -163,7 +166,9 @@ export default new Vuex.Store({
     removeworkDate({ commit }, date ){
       commit('removeworkDate', date)
     },
+    save({ commit } ){
+      commit('save')
+    },
     
-    // Here we will create Larry
   }
 });

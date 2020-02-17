@@ -1,26 +1,10 @@
 <template>
   <div class="weekView">
     <h2>Widok Tygodnia</h2>
-    <ul>
-    <li v-for="(day, key) in days" v-bind:key=day.name class="weekDay">
-       <div class="name"> {{day.name}}</div>
-   <div class="modify">
-         Modyfikuj potrzebę
-         <select v-model="roleperDay[key]">
-             <option v-for="role in roles" :value="role" v-bind:key=role> {{role}}</option>
-    </select>
-    <input type="number" v-model="amountperDay[key]" />
-    <button v-on:click="modNeed(key)">How many needed</button>
-    </div>
-    <div class="assign">
-         Dodaj usera
-         <select v-model="assignPerDay[key]">
-             <option v-for="user in filteredUsers(key)" :value="user" v-bind:key=user.lastName> {{user.lastName}}</option>
-    </select>
-       <button v-on:click="modAssign(key)">AssignUser</button>
-                                  <button v-on:click="assignRandom(key)">Assign Random</button>
-    </div>
-    <div class="needs">Potrzebni:
+    <div v-for="(day, key) in days" v-bind:key=day.name class="weekDay">
+       <div class="mainInfo">
+           <div class="name"> {{day.name}}</div>
+             <div class="needs">Potrzebni:
     <ul>
     <li v-for="(amount, k) in day.needs" v-bind:key=day+k>
         {{k}}: {{amount}}
@@ -34,16 +18,34 @@
             {{role}}: 
             <ul>
                 <li v-for="(p) in person" v-bind:key=day+p.lastName>
-                     {{p.userName}} {{person.lastName}}
+                     {{p.firstName}} {{person.lastName}}
                 </li>
                 </ul>
 
         </li>
         </ul>
         </div>
-    <!-- <input type='date' v-model='usertemp[item.id].blocked'/> -->
-  </li>
-  </ul>
+           </div>
+           <div class="sideAction">
+   <div class="modify">
+            Ile osób potrzeba<br />
+         <select v-model="roleperDay[key]">
+             <option v-for="role in roles" :value="role" v-bind:key=role> {{role}}</option>
+    </select>
+    <input type="number" min=0 v-model="amountperDay[key]" />
+    <button v-on:click="modNeed(key)">Dodaj</button>
+    </div>
+    <div class="assign">
+         Przypisz pracownika <br />
+         <select v-model="assignPerDay[key]">
+             <option v-for="user in filteredUsers(key)" :value="user" v-bind:key=user.lastName> {{user.lastName}}</option>
+    </select>
+       <button v-on:click="modAssign(key)">Wybranego</button>
+                                  <button v-on:click="assignRandom(key)">Losowo</button>
+    </div>
+    </div>
+  
+  </div>
   </div>
 </template>
 
@@ -96,7 +98,7 @@ return {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
 .weekView{
   width:100%
 }
@@ -104,31 +106,46 @@ return {
     float:left;
     width:100%;
     border-bottom:2px solid;
+    padding:10px;
 }
-.name {
-    float:left;
-    width:60%;
-}
+
 h3 {
   margin: 40px 0 0;
 }
 a {
   color: #42b983;
 }
-.modify{
-    width:40%;
-    float:right;
-}
-.needs{
-    float:left;
-    width:20%;
-}
- .assigned{
-     float:left;
-     width:50%
+ .mainInfo{
+    width:60%;
+    float: left;
+    .name {
+        float:left;
+        width:100%;
+    }
+    .needs {
+        float:left;
+        width: 20%;
+    }
+    .assigned{
+        float:left;
+        width:80%;
+    }
+    ul, li{
+        padding:3px;
+    list-style-type:none
+    }
  }
- .assign{
-     float:right;
+ .sideAction{
      width:40%;
+         float: left;
+         .modify, .assign{
+            width:100%;
+            padding: 5px 0;
+        }
+        input, select{
+            width:100px; margin: 5px; height: 20px;
+                padding: 0;
+
+        }
  }
 </style>

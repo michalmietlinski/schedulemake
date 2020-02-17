@@ -1,7 +1,7 @@
 <template>
 <div>
-    <h2>Dodaj</h2>
-    <input type='text' v-model="userName" placeholder="Imię"> <br />
+    <h2>Dodaj Pracownika</h2>
+    <input type='text' v-model="firstName" placeholder="Imię"> <br />
     <input type='text' v-model="lastName" placeholder="Nazwisko"><br />
     <select v-model="userRole">
              <option v-for="role in roles" :value="role" v-bind:key=role> {{role}}</option>
@@ -24,18 +24,18 @@ export default {
   },
   data:function() {
 return {
-    userName: '',
+    firstName: '',
     lastName: '',
     userRole: ''
   };
 },
   methods: {
     addUser: function(){
-      if(!this.userName||!this.lastName||!this.userRole){
+      if(!this.firstName||!this.lastName||!this.userRole){
         alert('Dane kurwa')
       }else{
-      store.dispatch('addUser', {userName: this.userName, lastName: this.lastName, role: this.userRole});
-     this.userName= '';
+      store.dispatch('addUser', {firstName: this.firstName, lastName: this.lastName, role: this.userRole});
+     this.firstName= '';
     this.lastName= ''
     }
     }
@@ -46,21 +46,5 @@ return {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.ListaUserow{
-  width:400px
-}
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
 </style>
