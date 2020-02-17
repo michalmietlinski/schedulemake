@@ -43,9 +43,6 @@
 import store from '../store';
 export default {
   name: 'SingleUser',
-  props: {
-    msg: String
-  },
   data: function() {
 return {
     selectedUser: '',

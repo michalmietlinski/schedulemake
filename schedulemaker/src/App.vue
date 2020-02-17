@@ -6,8 +6,9 @@
             <router-link to="/">Pracownicy</router-link>
             <router-link to="/SingleUser">Per pracownik</router-link>
             <router-link to="/WeekView">Widok kalendarza</router-link>
-
+            <router-link to="/Settings">Ustawiania</router-link>
             <button v-on:click="save">Zapisz do pamięci przeglądarki</button>
+            <button v-on:click="reset">Reset kalendarza</button>
       </div>
      <div class="app-wrapper">
         <transition name="router-anim" enter-active-class="animated bounceInLeft">
@@ -26,6 +27,10 @@ export default {
     save: function(){
             store.dispatch('save',);
     },
+    reset: function(){
+            store.dispatch('reset',);
+    },
+    
     }
 }
 </script>

@@ -6,7 +6,7 @@
            <div class="name"> {{day.name}}</div>
              <div class="needs">Potrzebni:
     <ul>
-    <li v-for="(amount, k) in day.needs" v-bind:key=day+k>
+    <li v-for="(amount, k) in day.needs" v-bind:key=day.name+k>
         {{k}}: {{amount}}
         </li>
         </ul>
@@ -14,7 +14,7 @@
     <div class="assigned">
         Przypisani:
         <ul>
-        <li v-for="(person, role) in day.assigned" v-bind:key=day+role>
+        <li v-for="(person, role) in day.assigned" v-bind:key=day.name+role>
             {{role}}: 
             <ul>
                 <li v-for="(p) in person" v-bind:key=day+p.lastName>
@@ -30,7 +30,7 @@
    <div class="modify">
             Ile osób potrzeba<br />
          <select v-model="roleperDay[key]">
-             <option v-for="role in roles" :value="role" v-bind:key=role> {{role}}</option>
+             <option v-for="role in roles" :value="role" v-bind:key=day.name+role> {{role}}</option>
     </select>
     <input type="number" min=0 v-model="amountperDay[key]" />
     <button v-on:click="modNeed(key)">Dodaj</button>

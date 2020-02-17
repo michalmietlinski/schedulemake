@@ -3,7 +3,7 @@ import Router from 'vue-router';
 import Home from './components/Home.vue';
 import WeekView from './components/WeekView.vue';
 import SingleUser from './components/SingleUser.vue';
-
+import Settings from './components/Settings.vue';
 
 Vue.use(Router);
 
@@ -24,5 +24,12 @@ export default new Router({
         name: 'SingleUser',
         component: SingleUser,
       },
+      {
+        path: '/Settings',
+        name: 'Settings',
+        component: Settings,
+      },
+
+      
   ],
 });

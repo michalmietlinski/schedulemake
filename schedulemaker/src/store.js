@@ -23,17 +23,25 @@ Date.prototype.yyyymmdd = function() {
           (dd>9 ? '' : '0') + dd
          ].join('-');
 };
-for(let i=0;i<24;i++){
+const generateDates=(n =24 , need={})=>{
+  console.log(n)
+for(let i=0;i<n;i++){
   let r=new Date;
   r.setDate(new Date(t).getDate()+i)
-  days[r.yyyymmdd()]= {name: r.yyyymmdd(),needs: {}, assigned:{}}
+  days[r.yyyymmdd()]= {name: r.yyyymmdd(),needs: need, assigned:{}}
+}
+return days
 }
 
 export default new Vuex.Store({
   state: {
+    settings:{
+      howmanydays: JSON.parse(sessionStorage.getItem('settings')) ? JSON.parse(sessionStorage.getItem('settings')).howmanydays: 24,
+    },
     users: JSON.parse(sessionStorage.getItem('users')) || [],
     roles: JSON.parse(sessionStorage.getItem('roles'))|| ['Barman', 'Kelner'],
-    days: JSON.parse(sessionStorage.getItem('days')) || days
+    days: JSON.parse(sessionStorage.getItem('days')) || generateDates(JSON.parse(sessionStorage.getItem('settings')) ? JSON.parse(sessionStorage.getItem('settings')).howmanydays: 24, {'Barman': 1, "Kelner": 1}),
+    
   },
   
   getters: {
@@ -138,6 +146,14 @@ export default new Vuex.Store({
       sessionStorage.setItem('users', JSON.stringify(state.users));
       sessionStorage.setItem('roles', JSON.stringify(state.roles));
       sessionStorage.setItem('days', JSON.stringify(state.days));
+      sessionStorage.setItem('settings', JSON.stringify(state.settings));
+    },
+    resetCalendar(state) {
+      sessionStorage.removeItem('days', JSON.stringify(state.days));
+      state.days=generateDates(state.settings.howmanydays, {'Barman': 1, "Kelner": 1})
+    },
+    saveSettings(state, data) {
+      state.settings=data
     }
   },
   
@@ -169,6 +185,11 @@ export default new Vuex.Store({
     save({ commit } ){
       commit('save')
     },
-    
+    saveSettings({ commit }, data ){
+      commit('saveSettings', data)
+    },
+    reset({ commit } ){
+      commit('resetCalendar')
+    },
   }
 });
