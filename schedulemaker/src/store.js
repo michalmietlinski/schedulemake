@@ -40,7 +40,7 @@ export default new Vuex.Store({
     },
     users: JSON.parse(sessionStorage.getItem('users')) || [],
     roles: JSON.parse(sessionStorage.getItem('roles'))|| ['Barman', 'Kelner'],
-    days: JSON.parse(sessionStorage.getItem('days')) || generateDates(JSON.parse(sessionStorage.getItem('settings')) ? JSON.parse(sessionStorage.getItem('settings')).howmanydays: 24, {'Barman': 1, "Kelner": 1}),
+    days: JSON.parse(sessionStorage.getItem('days')) ||{}// generateDates(JSON.parse(sessionStorage.getItem('settings')) ? parseInt(JSON.parse(sessionStorage.getItem('settings')).howmanydays): 24, {'Barman': 1, "Kelner": 1}),
     
   },
   
@@ -74,9 +74,21 @@ export default new Vuex.Store({
       }
     },
     addBusyDate(state, date) {
+      function cleanAddigned(data) {
+        if(state.days[data.day].assigned[data.user.role]&&state.days[data.day].assigned[data.user.role].includes(data.user)){
+          state.days[data.day].assigned[data.user.role]=state.days[data.day].assigned[data.user.role].filter((el)=>el.id!==data.user.id)
+          state.users=state.users.map((el)=>{
+              if(el.id==data.user.id){
+                el.workDates=el.workDates.filter((e2)=>e2!==data.day)
+              }
+              return el
+          })
+         }
+      }
       state.users=state.users.map((el)=>{
         if(el.id===date[0]&&!el.blockedDates.includes(date[1])){
           el.blockedDates.push(date[1])
+          cleanAddigned({day: date[1], user: el })
         }
         return el
       })
@@ -105,6 +117,17 @@ export default new Vuex.Store({
         return el
       })
     }
+    },
+    removeAssigned(state, data) {
+      if(state.days[data.day].assigned[data.user.role].includes(data.user)){
+        state.days[data.day].assigned[data.user.role]=state.days[data.day].assigned[data.user.role].filter((el)=>el.id!==data.user.id)
+        state.users=state.users.map((el)=>{
+            if(el.id==data.user.id){
+              el.workDates=el.workDates.filter((e2)=>e2!==data.day)
+            }
+            return el
+        })
+       }
     },
     assignRandom(state, data) {
       for (const [key, value] of Object.entries(state.days[data.day].needs)) {
@@ -149,11 +172,17 @@ export default new Vuex.Store({
       sessionStorage.setItem('settings', JSON.stringify(state.settings));
     },
     resetCalendar(state) {
-      sessionStorage.removeItem('days', JSON.stringify(state.days));
+      sessionStorage.removeItem('days');
       state.days=generateDates(state.settings.howmanydays, {'Barman': 1, "Kelner": 1})
     },
     saveSettings(state, data) {
       state.settings=data
+    },
+    clear() {
+      sessionStorage.removeItem('users');
+      sessionStorage.removeItem('roles');
+      sessionStorage.removeItem('days');
+      sessionStorage.removeItem('settings');
     }
   },
   
@@ -176,6 +205,9 @@ export default new Vuex.Store({
     setAssign({ commit }, date ){
       commit('setAssign', date)
     },
+    removeAssigned({ commit }, date ){
+      commit('removeAssigned', date)
+    },
     assignRandom({ commit }, date ){
       commit('assignRandom', date)
     },
@@ -191,5 +223,9 @@ export default new Vuex.Store({
     reset({ commit } ){
       commit('resetCalendar')
     },
+    clear({ commit } ){
+      commit('clear')
+    },
+    
   }
 });

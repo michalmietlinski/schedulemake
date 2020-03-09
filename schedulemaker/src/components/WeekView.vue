@@ -1,7 +1,7 @@
 <template>
   <div class="weekView">
     <h2>Widok Tygodnia</h2>
-    <div v-for="(day, key) in days" v-bind:key=day.name class="weekDay">
+    <div v-for="(day, key) in days" v-bind:key=day.name class="weekDay"    v-bind:class="{green: checkFill(day)}">
        <div class="mainInfo">
            <div class="name"> {{day.name}}</div>
              <div class="needs">Potrzebni:
@@ -18,7 +18,7 @@
             {{role}}: 
             <ul>
                 <li v-for="(p) in person" v-bind:key=day+p.lastName>
-                     {{p.firstName}} {{person.lastName}}
+                     {{p.firstName}} {{person.lastName}} <button v-on:click="removeAssigned(p, key)"> Remove</button>
                 </li>
                 </ul>
 
@@ -27,15 +27,16 @@
         </div>
            </div>
            <div class="sideAction">
-   <div class="modify">
+             <input type="checkbox" v-model="needsDay[key]"/> Potrzeba/ Przypisz
+          <div class="modify" v-show="needsDay[key]">
             Ile osób potrzeba<br />
          <select v-model="roleperDay[key]">
              <option v-for="role in roles" :value="role" v-bind:key=day.name+role> {{role}}</option>
-    </select>
-    <input type="number" min=0 v-model="amountperDay[key]" />
-    <button v-on:click="modNeed(key)">Dodaj</button>
-    </div>
-    <div class="assign">
+        </select>
+          <input type="number" min=0 v-model="amountperDay[key]" />
+          <button v-on:click="modNeed(key)">Dodaj</button>
+          </div>
+    <div class="assign" v-show="!needsDay[key]">
          Przypisz pracownika <br />
          <select v-model="assignPerDay[key]">
              <option v-for="user in filteredUsers(key)" :value="user" v-bind:key=user.lastName> {{user.lastName}}</option>
@@ -60,7 +61,8 @@ export default {
 return {
     roleperDay: {},
     amountperDay:{},
-    assignPerDay:{}
+    assignPerDay:{},
+    needsDay:{},
   };
 },
   computed: {
@@ -85,14 +87,29 @@ return {
             }
     },
     modAssign: function(day){
-              store.dispatch('setAssign', {day: day, user: this.assignPerDay[day]});
-        },
+      if(this.assignPerDay[day]){
+        store.dispatch('setAssign', {day: day, user: this.assignPerDay[day]});
+      }
+    },
+    removeAssigned: function(user, day){
+            store.dispatch('removeAssigned', {day: day, user: user});
+    },
     assignRandom: function(day){
               store.dispatch('assignRandom', {day: day});
         },
-        filteredUsers: function(day){
-            return this.users.filter((el)=>!el.blockedDates.includes(day))
+    filteredUsers: function(day){
+     return this.users.filter((el)=>!el.blockedDates.includes(day))
+    },
+    checkFill: function(day){
+      let g= Object.keys(day.needs);
+      let r=true;
+      g.forEach((g1)=>{
+        if(!day.assigned[g1] || day.needs[g1] > day.assigned[g1].length){
+          r=false;
         }
+      })
+      return r
+    }
   }
 }
 </script>
@@ -101,6 +118,9 @@ return {
 <style scoped lang="scss">
 .weekView{
   width:100%
+}
+.weekDay.green{
+  background: #ceffdf;
 }
 .weekDay {
     float:left;

@@ -9,6 +9,7 @@
             <router-link to="/Settings">Ustawiania</router-link>
             <button v-on:click="save">Zapisz do pamięci przeglądarki</button>
             <button v-on:click="reset">Reset kalendarza</button>
+            <button v-on:click="clear">Wyczyść pamięć</button>
       </div>
      <div class="app-wrapper">
         <transition name="router-anim" enter-active-class="animated bounceInLeft">
@@ -25,12 +26,15 @@ export default {
   name: 'App',
     methods:{
     save: function(){
-            store.dispatch('save',);
+            store.dispatch('save');
     },
     reset: function(){
-            store.dispatch('reset',);
+            store.dispatch('reset');
     },
-    
+    clear: function(){
+            store.dispatch('clear');
+            window.location.reload(true);
+    },
     }
 }
 </script>
