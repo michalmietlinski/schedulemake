@@ -37,7 +37,7 @@
           <button v-on:click="modNeed(key)">Dodaj</button>
           </div>
     <div class="assign" v-show="!needsDay[key]">
-         Przypisz pracownika <br />
+         <b>Przypisz pracownika</b> <br />
          <select v-model="assignPerDay[key]">
              <option v-for="user in filteredUsers(key)" :value="user" v-bind:key=user.lastName> {{user.lastName}}</option>
     </select>
@@ -138,6 +138,8 @@ a {
  .mainInfo{
     width:60%;
     float: left;
+    border-right: 2px solid;
+
     .name {
         float:left;
         width:100%;
@@ -158,14 +160,14 @@ a {
  .sideAction{
      width:40%;
          float: left;
+         padding:5px;
+
          .modify, .assign{
             width:100%;
             padding: 5px 0;
         }
-        input, select{
-            width:100px; margin: 5px; height: 20px;
-                padding: 0;
-
-        }
+        
+      
+        
  }
 </style>

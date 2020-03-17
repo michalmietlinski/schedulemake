@@ -55,4 +55,32 @@ export default {
     padding: 5px 10px;
   }
 }
+
+button{
+          margin-right:5px;
+          border: none;
+          padding: 3px 5px;
+          background: #57a79f;
+          color:#fff;
+          &:hover {
+            background: #000;
+          }
+        }
+
+        input[type=checkbox] {
+          width: 20px;
+          border: none;
+        }
+
+        
+        input, select{
+            width:100px; 
+            margin: 0 5px 0 0; height: 20px;
+            padding: 0;
+        }
+
+        input[type=text], select {
+          margin: 5px 5px 5px 0;
+        }
+
 </style>

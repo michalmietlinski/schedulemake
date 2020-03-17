@@ -24,7 +24,7 @@
         <div>
         <div class="singleDate">
           <input type="date" v-model="dateBusy" />
-          <button v-on:click="addBusyDate()" >Dodaj termin wyłączony</button>
+          <button v-on:click="addBusyDate()" >Dodaj termin wyłączony</button> <button v-on:click="removeBusyDate()" >Usuń termin wyłączony</button>
 
         </div>
         <div class="multiDate">
@@ -33,9 +33,9 @@
           <button v-on:click="addBusyDates()" >Dodaj terminy wyłączony</button>
 
         </div>
-        <button v-on:click="removeBusyDate()" >Usuń termin wyłączony</button>
+        
         </div>
-        <div>
+        <div class="workdates">
            Dni wyłączone:
         <ul>
             <li v-for="date in selectedUser.blockedDates" v-bind:key=date>
@@ -44,13 +44,16 @@
                 </li>
             </ul>
         </div>
+        <div class="workdates">
+
              Dni pracujące:
         <ul>
             <li v-for="date in selectedUser.workDates" v-bind:key=date>
                 {{date}}         <button v-on:click="removeworkDate(date)" >Usuń termin pracujący</button>
 
                 </li>
-            </ul>
+        </ul>
+        </div>
         <Calendar v-bind:uuu="selectedUser" Month="2" />
 
         </div>
@@ -91,13 +94,13 @@ return {
         }
     },
     addBusyDates: function(){
-      
+        console.log(this.dateBusyStart, this.dateBusyEnd)
       if(new Date(this.dateBusyStart)<new Date()||!this.dateBusyStart||new Date(this.dateBusyStart)>new Date(this.dateBusyEnd)){
             alert('Co ty kurwa historię przerabiasz?')
         }else{
           const days= (new Date(this.dateBusyEnd)-new Date(this.dateBusyStart))/1000/3600/24;
           for(let i=0;i<days;i++){
-            const d=new Date(new Date(['2020-03-11'.split('-')]).getTime()+i*24*3600000);
+            const d=new Date(new Date([this.dateBusyStart.split('-')]).getTime()+i*24*3600000);
             const dformatted=`${d.getFullYear()}-${('0' + (d.getMonth()+1)).slice(-2)}-${('0' + d.getDate()).slice(-2)}`;
             store.dispatch('addBusyDate', [this.selectedUser.id, dformatted ]);
           }
@@ -123,21 +126,61 @@ return {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .SingleUser{
-  width:600px;
+  width:100%;
   select {
       min-width:100px
   }
   .info{
       display: inline-block;
       width:120px;
+      margin-bottom: 10px;
+    font-weight: 700;
   }
-  .userList, .selectedUser{
-    width:50%;
+  .userList{
+    width:20%;
     float:left;
+    min-width:200px;
+  }
+  .selectedUser{
+    width:80%;
+    float:left;
+    min-width:200px;
   }
   .selectUser{
     width:100%;
     float:left;
+  }
+  .singleDate{
+    input{
+      width:150px;
+    }
+  }
+  .multiDate{
+    padding:10px 0;
+    input{
+      width:150px;
+    }
+  }
+  .workdates{
+    max-width:400px;
+    li{
+      float:left;
+      width:100%;
+    }
+    button{
+      float:right;
+    }
+  }
+  .userList{
+    padding-right:20px;
+    &>div{
+      width:100%;
+      padding:0 0 10px 0;
+      float:left;
+      button{
+        float:right;
+      }
+    }
   }
 }
 

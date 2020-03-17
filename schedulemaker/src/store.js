@@ -75,7 +75,7 @@ export default new Vuex.Store({
     },
     addBusyDate(state, date) {
       function cleanAddigned(data) {
-        if(state.days[data.day].assigned[data.user.role]&&state.days[data.day].assigned[data.user.role].includes(data.user)){
+        if(state.days[data.day]&&state.days[data.day].assigned[data.user.role]&&state.days[data.day].assigned[data.user.role].includes(data.user)){
           state.days[data.day].assigned[data.user.role]=state.days[data.day].assigned[data.user.role].filter((el)=>el.id!==data.user.id)
           state.users=state.users.map((el)=>{
               if(el.id==data.user.id){
